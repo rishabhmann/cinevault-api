@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: cinevault-api
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cinevault
+    username: postgres
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+server:
+  port: 8080
