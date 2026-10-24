@@ -66,4 +66,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setTitle("Conflict");
         return problem;
     }
+
+    // 500: last resort. Log everything, tell the client nothing internal.
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleUnexpected(Exception ex) {
+        log.error("Unexpected error", ex);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        problem.setTitle("Internal Server Error");
+        return problem;
+    }
 }
