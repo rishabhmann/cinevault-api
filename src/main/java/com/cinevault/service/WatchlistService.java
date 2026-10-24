@@ -2,6 +2,8 @@ package com.cinevault.service;
 
 import java.util.List;
 
+import com.cinevault.entity.User;
+import com.cinevault.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,12 @@ import lombok.RequiredArgsConstructor;
 public class WatchlistService {
 
     private final WatchlistItemRepository repository;
+    private final UserRepository userRepository;
 
     @Transactional
     public WatchlistItemResponse create(CreateWatchlistItemRequest request) {
         WatchlistItem item = new WatchlistItem();
+        item.setUser(currentUser());
         item.setTmdbId(request.tmdbId());
         item.setTitle(request.title());
         item.setStatus(request.status());
@@ -60,5 +64,10 @@ public class WatchlistService {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Watchlist item " + id + " not found"));
+    }
+
+    private User currentUser() {
+        return userRepository.findByEmail("demo@cinevault.local")
+                .orElseThrow(() -> new IllegalStateException("Demo user missing"));
     }
 }
