@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateWatchlistItemRequest(
-        @NotNull
+        @NotNull(message = "status is required")
         WatchStatus status,
 
-        @Min(1)
-        @Max(10)
+        @Min(value = 1, message = "rating must be at least 1")
+        @Max(value = 10, message = "rating must be at most 10")
         Integer rating
 ) {}

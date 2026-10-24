@@ -9,17 +9,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateWatchlistItemRequest(
-        @NotNull
+        @NotNull(message = "tmdbId is required")
         Long tmdbId,
 
-        @NotBlank
-        @Size(max = 255)
+        @NotBlank(message = "title must not be blank")
+        @Size(max = 255, message = "title must be at most 255 characters")
         String title,
 
-        @NotNull
+        @NotNull(message = "status is required")
         WatchStatus status,
 
-        @Min(1)
-        @Max(10)
+        @Min(value  = 1, message = "rating must be at least 1")
+        @Max(value  = 10, message = "rating must be at most 10")
         Integer rating
 ) {}

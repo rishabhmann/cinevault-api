@@ -3,6 +3,7 @@ package com.cinevault.service;
 import java.util.List;
 
 import com.cinevault.entity.User;
+import com.cinevault.exception.ConflictException;
 import com.cinevault.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,15 @@ public class WatchlistService {
 
     @Transactional
     public WatchlistItemResponse create(CreateWatchlistItemRequest request) {
+        User user = currentUser();
+
+        if (repository.existsByUserIdAndTmdbId(user.getId(), request.tmdbId())) {
+            throw new ConflictException("This movie is already in your watchlist");
+        }
+
         WatchlistItem item = new WatchlistItem();
-        item.setUser(currentUser());
+
+        item.setUser(user);
         item.setTmdbId(request.tmdbId());
         item.setTitle(request.title());
         item.setStatus(request.status());
